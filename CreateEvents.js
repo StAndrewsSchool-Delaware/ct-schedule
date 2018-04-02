@@ -1,8 +1,6 @@
 var ics = require('ics');
 var fs = require('fs');
 
-// I changed this file!!!
-
 // set dates
 var startDate = new Date(2018, 8, 4);
 var currentDate = new Date(startDate);
@@ -21,16 +19,6 @@ var classStartingTimes = [
 
 // user's classes (should be a length of 7 in real life)
 var classes = ['Compsci', 'Physics', 'Free', 'Math', 'Bio', 'Econ'];
-
-var isWeekend = function(date) {
-	if (date.getDay() == 0 || date.getDay() == 6) {
-		return true;
-	}
-	return false;
-}
-var dayAfter = function(date) {
-	return date.getDate()+1;
-}
 
 // initialize 'events' array; will be filled in the following loop
 var events = [];
@@ -73,4 +61,19 @@ if (response.error) {
 	console.log(response.error);
 } else {
 	fs.writeFileSync('./events.ics', response.value);
+}
+
+
+
+// function definitions
+
+function dayAfter(date) {
+	return date.getDate()+1;
+}
+
+function isWeekend (date) {
+	if (date.getDay() == 0 || date.getDay() == 6) {
+		return true;
+	}
+	return false;
 }
