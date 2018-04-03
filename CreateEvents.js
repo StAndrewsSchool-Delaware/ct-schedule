@@ -6,8 +6,7 @@ var startDate = new Date(2018, 8, 4);
 var currentDate = new Date(startDate);
 var endDate = new Date(2019, 4, 23);
 // list of no class days
-var noClass = []
-
+var noClass = [];
 var classesPerDay = 4;
 var classCount = 0; // "nth" class of the year (current class)
 var classStartingTimes = [
@@ -17,19 +16,19 @@ var classStartingTimes = [
 	{ hour: 14, minute: 15 }
 ];
 
-// user's classes (should be a length of 7 in real life)
+// user's classes
 var classes = ['Compsci', 'Physics', 'Free', 'Math', 'Bio', 'Econ'];
 
-// initialize 'events' array; will be filled in the following loop
+// initialize 'events' array; will be filled in the following loop with all schedules classes
 var events = [];
 
-while (currentDate < endDate) {
+while (currentDate <= endDate) {
 
 	if (isWeekend(currentDate)) {
 		currentDate.setDate(dayAfter(currentDate));
 		continue;
 	}
-	else if (noClass.length != 0 && currentDate == noClass[0]) {
+	else if (noSchool(currentDate)) {
 		noClass.splice(0,1);
 		currentDate.setDate(dayAfter(currentDate));
 		continue;
@@ -37,13 +36,16 @@ while (currentDate < endDate) {
 
 	for (var i = 0; i < classesPerDay; i++) {
 		var className = classes[classCount % classes.length];
+		var classTime = {hour: classStartingTimes[i].hour,
+						 minute: classStartingTimes[i].minute};
+
 		events.push({
 			title: className,
 			start: [currentDate.getFullYear(),
 					currentDate.getMonth()+1,
 					currentDate.getDate(),
-					classStartingTimes[i].hour,
-					classStartingTimes[i].minute],
+					classTime.hour,
+					classTime.minute],
 		    duration: {hours: 1}
 		});
 
@@ -67,13 +69,14 @@ if (response.error) {
 
 // function definitions
 
-function dayAfter(date) {
+function dayAfter (date) {
 	return date.getDate()+1;
 }
 
 function isWeekend (date) {
-	if (date.getDay() == 0 || date.getDay() == 6) {
-		return true;
-	}
-	return false;
+	return date.getDay() == 0 || date.getDay() == 6;
+}
+
+function noSchool (date) {
+	return noClass.length != 0 && date == noClass[0];
 }
